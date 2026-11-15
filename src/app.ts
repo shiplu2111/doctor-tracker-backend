@@ -50,9 +50,23 @@ export const createApp = (): Application => {
   app.use(helmet());
 
   // 4. CORS configuration
+  const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((o) => o.trim());
   app.use(
     cors({
-      origin: env.CLIENT_ORIGIN,
+      origin: (origin, callback) => {
+        // allow requests with no origin (like curl, server-to-server)
+        if (!origin) return callback(null, true);
+        if (
+          env.CLIENT_ORIGIN === '*' ||
+          allowedOrigins.includes(origin) ||
+          allowedOrigins.includes('*') ||
+          origin.endsWith('.vercel.app') ||
+          origin.includes('localhost')
+        ) {
+          return callback(null, true);
+        }
+        return callback(new Error(`CORS error: origin ${origin} not allowed`));
+      },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Request-Id'],
