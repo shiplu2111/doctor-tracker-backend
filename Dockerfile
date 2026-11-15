@@ -3,13 +3,19 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy shared package and build
-COPY shared ./shared
-RUN cd shared && npm ci && npm run build
+# Copy root package files and shared package
+COPY package*.json ./
+COPY packages/shared ./packages/shared
 
-# Copy server package and build
-COPY server ./server
-RUN cd server && npm ci && npm run build
+# Install dependencies
+RUN npm install
+
+# Copy source code and TypeScript config
+COPY tsconfig.json ./
+COPY src ./src
+
+# Build shared library and server
+RUN npm run build
 
 FROM node:20-alpine AS runner
 
@@ -17,17 +23,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=4000
 
-# Copy built shared library
-COPY --from=builder /app/shared ./shared
+# Copy shared package and install production dependencies
+COPY packages/shared ./packages/shared
+COPY package*.json ./
+RUN npm install --omit=dev --ignore-scripts || npm install --omit=dev
 
-# Install production dependencies for server
-COPY --from=builder /app/server/package*.json ./server/
-RUN cd server && npm ci --omit=dev
+# Copy compiled outputs
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/dist ./dist
 
-# Copy compiled JavaScript output
-COPY --from=builder /app/server/dist ./server/dist
-
-WORKDIR /app/server
 EXPOSE 4000
 
 CMD ["node", "dist/server.js"]
