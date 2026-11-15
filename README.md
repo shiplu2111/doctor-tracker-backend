@@ -3,6 +3,9 @@
 ## Description
 Doctor Tracker Backend is a secure, resilient, and optimized RESTful API service built with Node.js, Express, TypeScript, and MongoDB. It powers clinical data management for hospital departments, handling high-volume doctor records, assigned patient rosters, aggregation pipelines for real-time analytics, and typo-tolerant search. The architecture enforces strict RBAC (Role-Based Access Control), JWT session rotation using httpOnly SameSite cookies, compound indexing for query performance, and Meilisearch write-through synchronization with automatic MongoDB fallback.
 
+- **Live Backend API (Render):** https://doctor-tracker-backend-991a.onrender.com/api/v1
+- **Health Check Endpoint:** https://doctor-tracker-backend-991a.onrender.com/health
+- **Live Frontend App (Vercel):** https://doctor-tracker-frontend-lilac.vercel.app
 - **Backend API Repository:** https://github.com/shiplu2111/doctor-tracker-backend
 - **Frontend Repository:** https://github.com/shiplu2111/doctor-tracker-frontend
 - **Default Seed Credentials:**
