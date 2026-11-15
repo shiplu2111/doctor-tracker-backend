@@ -20,6 +20,7 @@ const envSchema = z.object({
     .string()
     .transform((val) => val === 'true')
     .default('false'),
+  COOKIE_SAMESITE: z.enum(['lax', 'strict', 'none']).default('lax'),
 
   // JWT & Auth
   JWT_ACCESS_SECRET: z.string().min(16, 'JWT_ACCESS_SECRET must be at least 16 chars').default('dev-jwt-access-secret-32-chars-long!'),
