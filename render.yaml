@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: doctor-tracker-backend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: MONGODB_URI
+        value: mongodb+srv://shiplu2111_db_user:Ob0j5WBaKGWMd7UG@cluster0.qzoxrhf.mongodb.net/doctor_tracker?retryWrites=true&w=majority
+      - key: CLIENT_ORIGIN
+        value: "*"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: none
+      - key: JWT_ACCESS_SECRET
+        value: production-jwt-access-secret-32-chars-long!
+      - key: JWT_REFRESH_SECRET
+        value: production-jwt-refresh-secret-32-chars-long!
+      - key: SEED_ADMIN_EMAIL
+        value: admin@example.com
+      - key: SEED_ADMIN_PASSWORD
+        value: ChangeMe-12345
